@@ -42,8 +42,8 @@
 ## 📊 GitHub Stats
 
 <div align="center">
-  <img width="49%" height="195px" src="https://github-readme-stats.vercel.app/api?username=marcelobragadossantos&show_icons=true&count_private=true&include_all_commits=true&include_orgs=true&hide_border=true&title_color=ff91a4&icon_color=00FFFF&text_color=c9d1d9&bg_color=0d1117" alt="Marcelo Braga github stats" />
-  <img width="41%" height="195px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=marcelobragadossantos&layout=compact&count_private=true&include_all_commits=true&hide_border=true&title_color=ff91a4&text_color=00FFFF&bg_color=0d1117" />
+  <img width="49%" height="195px" src="https://github-readme-stats.vercel.app/api?username=marcelobragadossantos&show_icons=true&count_private=true&include_all_commits=true&hide_border=true&title_color=ff91a4&icon_color=00FFFF&text_color=c9d1d9&bg_color=0d1117&rank_icon=github" alt="Marcelo Braga github stats" />
+  <img width="41%" height="195px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=marcelobragadossantos&layout=compact&count_private=true&langs_count=10&hide_border=true&title_color=ff91a4&text_color=00FFFF&bg_color=0d1117" />
 </div>
 
 <div align="center">
