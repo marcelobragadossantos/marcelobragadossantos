@@ -58,19 +58,4 @@
   <img src="https://github-profile-trophy.vercel.app/?username=marcelobragadossantos&theme=radical&no-frame=true&no-bg=true&column=7&margin-w=15&margin-h=15" />
 </div>
 
-<br>
-
-## 📈 Contribution Graph
-
-<div align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=marcelobragadossantos&bg_color=0d1117&color=00FFFF&line=ff91a4&point=ff91a4&area=true&hide_border=true" />
-</div>
-
-<br>
-
-<div align="center">
-  <p align="center"><b>👀 Visitors Count</b></p>
-  <p align="center"><img align="center" src="https://profile-counter.glitch.me/{marcelobragadossantos}/count.svg" /></p>
-</div>
-
 <img width=100% src="https://capsule-render.vercel.app/api?type=waving&color=00FFFF&height=120&section=footer"/>
