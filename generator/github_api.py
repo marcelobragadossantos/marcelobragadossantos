@@ -213,25 +213,36 @@ class GitHubAPI:
     def fetch_languages(self) -> dict:
         """Fetch language byte counts aggregated across all owned non-fork repos."""
         languages = {}
+        repo_count = 0
         for repos in self._paginate_repos():
+            logger.info("Processing batch of %d repos for languages...", len(repos))
             for repo in repos:
                 if repo.get("fork"):
+                    logger.info("Skipping fork: %s", repo.get("full_name", "unknown"))
                     continue
+                repo_count += 1
+                repo_name = repo.get("full_name", "unknown")
+                private = repo.get("private", False)
+                logger.info("Fetching languages for %s (private=%s)", repo_name, private)
                 try:
                     lang_resp = self._request("GET", repo["languages_url"])
                     if lang_resp.status_code == 200:
-                        for lang, bytes_count in lang_resp.json().items():
+                        repo_langs = lang_resp.json()
+                        if repo_langs:
+                            logger.info("  %s: %s", repo_name, list(repo_langs.keys()))
+                        for lang, bytes_count in repo_langs.items():
                             languages[lang] = languages.get(lang, 0) + bytes_count
                     else:
                         logger.warning(
                             "Could not fetch languages for %s (HTTP %d)",
-                            repo.get("full_name", "unknown"),
+                            repo_name,
                             lang_resp.status_code,
                         )
                 except requests.exceptions.RequestException as e:
                     logger.warning(
                         "Error fetching languages for %s: %s",
-                        repo.get("full_name", "unknown"),
+                        repo_name,
                         e,
                     )
+        logger.info("Processed %d repos total. Languages found: %s", repo_count, dict(languages))
         return languages
