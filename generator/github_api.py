@@ -157,23 +157,35 @@ class GitHubAPI:
         # Fetch actual issue count via Search API
         issue_count = self._search_count(f"author:{self.username} type:issue")
 
+        if self.token:
+            total_repos = user_data.get("public_repos", 0) + user_data.get("total_private_repos", 0)
+        else:
+            total_repos = user_data.get("public_repos", 0)
+
         return {
             "commits": commit_count,
             "stars": total_stars,
             "prs": pr_count,
             "issues": issue_count,
-            "repos": user_data.get("public_repos", 0),
+            "repos": total_repos,
         }
 
     def _paginate_repos(self):
-        """Yield pages of owned repos from the REST API."""
+        """Yield pages of owned repos from the REST API.
+
+        Uses /user/repos (authenticated) when a token is available to include
+        private repositories. Falls back to /users/{username}/repos (public only).
+        """
         page = 1
+        if self.token:
+            url = f"{self.REST_URL}/user/repos"
+            params = {"per_page": 100, "page": page, "affiliation": "owner", "visibility": "all"}
+        else:
+            url = f"{self.REST_URL}/users/{self.username}/repos"
+            params = {"per_page": 100, "page": page, "type": "owner"}
         while True:
-            repos_resp = self._request(
-                "GET",
-                f"{self.REST_URL}/users/{self.username}/repos",
-                params={"per_page": 100, "page": page, "type": "owner"},
-            )
+            params["page"] = page
+            repos_resp = self._request("GET", url, params=params)
             repos_resp.raise_for_status()
             repos = repos_resp.json()
             if not repos:
