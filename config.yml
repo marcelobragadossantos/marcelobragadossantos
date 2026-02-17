@@ -1,0 +1,80 @@
+# Galaxy Profile README Configuration
+# Customizado para Marcelo Braga dos Santos
+#
+# Regenerar SVGs:
+#   python -m generator.main
+#
+# Modo demo (sem chamadas API):
+#   python -m generator.main --demo
+
+# Your GitHub username (required)
+username: marcelobragadossantos
+
+# Profile information displayed in the galaxy header
+profile:
+  name: "Marcelo Braga dos Santos"
+  tagline: "Business Intelligence & Data Science"
+  company: ""
+  location: "Brasil"
+  bio: |
+    Engenheiro de Producao & Administracao com multiplos MBAs.
+    Atuando na interseccao entre tecnologia e negocios, focado em transformar dados em insights e resultados de impacto.
+  philosophy: '"Transformando dados em insights para decisoes de impacto."'
+
+# Social links displayed at the bottom of the profile
+social:
+  email: "marcelo.bragadossantos@gmail.com"
+  linkedin: "marcelo-braga-dos-santos-9479b130"
+
+# Galaxy arms represent your core focus areas
+# Each arm spirals out from the center with its own color and tech items
+galaxy_arms:
+  - name: "Data & BI"
+    color: "synapse_cyan"
+    items:
+      - "Python"
+      - "Power BI"
+      - "PostgreSQL"
+  - name: "Backend"
+    color: "dendrite_violet"
+    items:
+      - "FastAPI"
+      - "Node.js"
+      - "NestJS"
+  - name: "Mobile & Frontend"
+    color: "axon_amber"
+    items:
+      - "React Native"
+
+# Featured projects shown as constellation stars
+projects: []
+
+# Theme color overrides (optional)
+theme:
+  void: "#080c14"
+  nebula: "#0f1623"
+  star_dust: "#1a2332"
+  synapse_cyan: "#00d4ff"
+  dendrite_violet: "#a78bfa"
+  axon_amber: "#ffb020"
+  text_bright: "#f1f5f9"
+  text_dim: "#94a3b8"
+  text_faint: "#64748b"
+
+# Stats configuration
+stats:
+  metrics:
+    - "commits"
+    - "stars"
+    - "prs"
+    - "issues"
+    - "repos"
+
+# Language display settings
+languages:
+  exclude:
+    - "HTML"
+    - "CSS"
+    - "Shell"
+    - "Makefile"
+  max_display: 8
