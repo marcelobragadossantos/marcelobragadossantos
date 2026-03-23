@@ -15,6 +15,8 @@ class GitHubAPI:
     GRAPHQL_URL = "https://api.github.com/graphql"
     REST_URL = "https://api.github.com"
 
+    MAX_RATE_LIMIT_WAIT = 60  # seconds — avoid hanging CI jobs
+
     def __init__(self, username: str, token: str = None):
         self.username = username
         self.token = token or os.environ.get("GITHUB_TOKEN", "")
@@ -43,10 +45,17 @@ class GitHubAPI:
                 time.strftime("%H:%M:%S", time.localtime(reset_ts)),
             )
 
-        # Retry once on rate-limit 403
+        # Retry once on rate-limit 403 (cap wait to avoid CI timeout)
         if resp.status_code == 403 and "rate limit" in resp.text.lower():
             reset_ts = int(resp.headers.get("X-RateLimit-Reset", 0))
             wait = max(reset_ts - int(time.time()), 1)
+            if wait > self.MAX_RATE_LIMIT_WAIT:
+                logger.warning(
+                    "Rate limited. Reset in %ds exceeds max wait (%ds), skipping retry.",
+                    wait,
+                    self.MAX_RATE_LIMIT_WAIT,
+                )
+                return resp
             logger.warning("Rate limited. Waiting %ds for reset...", wait)
             time.sleep(wait)
             resp = requests.request(method, url, **kwargs)
@@ -106,22 +115,26 @@ class GitHubAPI:
             logger.warning("GraphQL errors: %s", data["errors"])
             return self._fetch_stats_rest()
 
-        user = data["data"]["user"]
-        contrib = user["contributionsCollection"]
-        repos = user["repositories"]
+        user = (data.get("data") or {}).get("user")
+        if user is None:
+            logger.warning("GraphQL returned null user, falling back to REST.")
+            return self._fetch_stats_rest()
 
-        total_stars = sum(n["stargazerCount"] for n in repos["nodes"])
+        contrib = user.get("contributionsCollection") or {}
+        repos = user.get("repositories") or {"totalCount": 0, "nodes": []}
+
+        total_stars = sum(n.get("stargazerCount", 0) for n in repos.get("nodes", []))
         total_commits = (
-            contrib["totalCommitContributions"]
-            + contrib["restrictedContributionsCount"]
+            contrib.get("totalCommitContributions", 0)
+            + contrib.get("restrictedContributionsCount", 0)
         )
 
         return {
             "commits": total_commits,
             "stars": total_stars,
-            "prs": user["pullRequests"]["totalCount"],
-            "issues": user["issues"]["totalCount"],
-            "repos": repos["totalCount"],
+            "prs": (user.get("pullRequests") or {}).get("totalCount", 0),
+            "issues": (user.get("issues") or {}).get("totalCount", 0),
+            "repos": repos.get("totalCount", 0),
         }
 
     def _fetch_stats_rest(self) -> dict:
