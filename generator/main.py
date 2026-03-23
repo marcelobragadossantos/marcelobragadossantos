@@ -74,14 +74,14 @@ def generate(args):
         logger.info("Fetching stats...")
         try:
             stats = api.fetch_stats()
-        except (requests.exceptions.RequestException, ValueError, KeyError) as e:
+        except (requests.exceptions.RequestException, ValueError, KeyError, TypeError) as e:
             logger.warning("Could not fetch stats (%s). Using defaults.", e)
             stats = {"commits": 0, "stars": 0, "prs": 0, "issues": 0, "repos": 0}
 
         logger.info("Fetching languages...")
         try:
             languages = api.fetch_languages()
-        except (requests.exceptions.RequestException, ValueError, KeyError) as e:
+        except (requests.exceptions.RequestException, ValueError, KeyError, TypeError) as e:
             logger.warning("Could not fetch languages (%s). Using defaults.", e)
             languages = {}
 
