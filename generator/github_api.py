@@ -23,6 +23,52 @@ class GitHubAPI:
         self.headers = {"Accept": "application/vnd.github.v3+json"}
         if self.token:
             self.headers["Authorization"] = f"Bearer {self.token}"
+        # Lazy cache for viewer-identity resolution. None = not yet resolved,
+        # "" = resolved to "no viewer" (no token or /user call failed),
+        # any other string = authenticated viewer login in lowercase.
+        self._viewer_login_cached = None
+
+    def _token_matches_target_user(self) -> bool:
+        """Return True if the token's authenticated viewer is self.username.
+
+        When the workflow runs with the default GITHUB_TOKEN, the viewer is
+        'github-actions[bot]' and token-scoped endpoints (/user/repos,
+        GraphQL viewer-relative fields) won't include the target user's
+        private data or owned repos. In that case we behave as if
+        unauthenticated for data scoping but keep the Authorization header
+        so we still benefit from the higher rate limit.
+        """
+        if not self.token:
+            return False
+        if self._viewer_login_cached is not None:
+            return bool(self._viewer_login_cached) and (
+                self._viewer_login_cached == self.username.lower()
+            )
+        try:
+            resp = self._request("GET", f"{self.REST_URL}/user")
+        except requests.exceptions.RequestException as e:
+            logger.warning("Error resolving token viewer: %s", e)
+            self._viewer_login_cached = ""
+            return False
+        if resp.status_code != 200:
+            logger.warning(
+                "Could not resolve /user (HTTP %d); treating token as non-matching.",
+                resp.status_code,
+            )
+            self._viewer_login_cached = ""
+            return False
+        login = (resp.json() or {}).get("login", "").lower()
+        self._viewer_login_cached = login or ""
+        if login != self.username.lower():
+            logger.warning(
+                "Token viewer is '%s' but target user is '%s'. "
+                "Falling back to public endpoints. Configure a PAT in the "
+                "GH_TOKEN secret (scopes: read:user, repo) to include private data.",
+                login or "<unknown>",
+                self.username,
+            )
+            return False
+        return True
 
     def _request(self, method: str, url: str, **kwargs) -> requests.Response:
         """Make an HTTP request with rate-limit awareness and retry.
@@ -63,8 +109,17 @@ class GitHubAPI:
         return resp
 
     def fetch_stats(self) -> dict:
-        """Fetch user statistics. Uses GraphQL if token available, REST otherwise."""
-        if self.token:
+        """Fetch user statistics.
+
+        Uses GraphQL only when the token's authenticated viewer matches the
+        target user — otherwise GraphQL's viewer-relative counts (restricted
+        contributions, private repos) would be 0 and mislead. Non-matching
+        tokens (e.g. the default workflow GITHUB_TOKEN, which is the
+        'github-actions[bot]' identity) are routed through REST, which uses
+        public endpoints that return the correct public numbers regardless
+        of viewer identity.
+        """
+        if self.token and self._token_matches_target_user():
             return self._fetch_stats_graphql()
         return self._fetch_stats_rest()
 
@@ -186,11 +241,14 @@ class GitHubAPI:
     def _paginate_repos(self):
         """Yield pages of owned repos from the REST API.
 
-        Uses /user/repos (authenticated) when a token is available to include
-        private repositories. Falls back to /users/{username}/repos (public only).
+        Uses /user/repos (authenticated) when the token belongs to the target
+        user — that endpoint returns both public and private repos. Otherwise
+        falls back to /users/{username}/repos, which returns only public repos
+        but works for any viewer identity (including the default workflow
+        GITHUB_TOKEN bot).
         """
         page = 1
-        if self.token:
+        if self.token and self._token_matches_target_user():
             url = f"{self.REST_URL}/user/repos"
             params = {"per_page": 100, "page": page, "affiliation": "owner", "visibility": "all"}
         else:
@@ -225,7 +283,18 @@ class GitHubAPI:
 
     def fetch_languages(self) -> dict:
         """Fetch language byte counts aggregated across all owned non-fork repos."""
+        languages, _ = self._fetch_languages_and_meta()
+        return languages
+
+    def _fetch_languages_and_meta(self) -> tuple:
+        """Fetch per-lang bytes plus metadata (repo count, last activity).
+
+        Returns a tuple (languages, lang_meta) where:
+          languages: {lang_name: total_bytes}
+          lang_meta: {lang_name: {"repos": int, "last_activity": iso_date or None}}
+        """
         languages = {}
+        lang_meta = {}
         repo_count = 0
         for repos in self._paginate_repos():
             logger.info("Processing batch of %d repos for languages...", len(repos))
@@ -236,6 +305,7 @@ class GitHubAPI:
                 repo_count += 1
                 repo_name = repo.get("full_name", "unknown")
                 private = repo.get("private", False)
+                pushed_at = repo.get("pushed_at")
                 logger.info("Fetching languages for %s (private=%s)", repo_name, private)
                 try:
                     lang_resp = self._request("GET", repo["languages_url"])
@@ -245,6 +315,15 @@ class GitHubAPI:
                             logger.info("  %s: %s", repo_name, list(repo_langs.keys()))
                         for lang, bytes_count in repo_langs.items():
                             languages[lang] = languages.get(lang, 0) + bytes_count
+                            meta = lang_meta.setdefault(
+                                lang, {"repos": 0, "last_activity": None}
+                            )
+                            meta["repos"] += 1
+                            if pushed_at and (
+                                meta["last_activity"] is None
+                                or pushed_at > meta["last_activity"]
+                            ):
+                                meta["last_activity"] = pushed_at
                     else:
                         logger.warning(
                             "Could not fetch languages for %s (HTTP %d)",
@@ -258,4 +337,142 @@ class GitHubAPI:
                         e,
                     )
         logger.info("Processed %d repos total. Languages found: %s", repo_count, dict(languages))
-        return languages
+        return languages, lang_meta
+
+    def fetch_commit_weeks(self) -> list:
+        """Fetch a 52-week contribution histogram via GraphQL contributionCalendar.
+
+        Returns a list of 52 ints (oldest to newest). Only works when the
+        token belongs to the target user; otherwise returns an empty list.
+        """
+        if not (self.token and self._token_matches_target_user()):
+            return []
+        query = """
+        query($username: String!) {
+          user(login: $username) {
+            contributionsCollection {
+              contributionCalendar {
+                weeks {
+                  contributionDays {
+                    contributionCount
+                  }
+                }
+              }
+            }
+          }
+        }
+        """
+        try:
+            resp = self._request(
+                "POST",
+                self.GRAPHQL_URL,
+                json={"query": query, "variables": {"username": self.username}},
+            )
+            resp.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            logger.warning("Could not fetch contribution calendar: %s", e)
+            return []
+        data = resp.json()
+        if "errors" in data:
+            logger.warning("GraphQL errors fetching calendar: %s", data["errors"])
+            return []
+        user = (data.get("data") or {}).get("user") or {}
+        weeks = (
+            (user.get("contributionsCollection") or {})
+            .get("contributionCalendar", {})
+            .get("weeks", [])
+        )
+        result = []
+        for week in weeks:
+            total = sum(
+                d.get("contributionCount", 0)
+                for d in week.get("contributionDays", [])
+            )
+            result.append(total)
+        # Take the last 52 weeks (GraphQL may return 53)
+        return result[-52:]
+
+    def fetch_flight_log(self, limit: int = 5) -> list:
+        """Fetch the most recent public push events as a commit log.
+
+        Returns a list of dicts: {sha, message, timestamp, repo}. Falls back
+        to an empty list on any error. The /events/public endpoint only
+        returns the last 90 days of activity, which is fine for a "recent
+        activity" view.
+        """
+        try:
+            resp = self._request(
+                "GET",
+                f"{self.REST_URL}/users/{self.username}/events/public",
+                params={"per_page": 100},
+            )
+            if resp.status_code != 200:
+                logger.warning(
+                    "Could not fetch events (HTTP %d)", resp.status_code
+                )
+                return []
+            events = resp.json()
+        except requests.exceptions.RequestException as e:
+            logger.warning("Error fetching events: %s", e)
+            return []
+
+        commits = []
+        for event in events:
+            if event.get("type") != "PushEvent":
+                continue
+            repo = (event.get("repo") or {}).get("name", "")
+            created_at = event.get("created_at", "")
+            for commit in reversed((event.get("payload") or {}).get("commits", [])):
+                # Only count commits authored by the target user (best effort:
+                # match on author.email prefix or name; GitHub redacts some).
+                msg = (commit.get("message") or "").split("\n", 1)[0]
+                sha = (commit.get("sha") or "")[:7]
+                commits.append(
+                    {
+                        "sha": sha,
+                        "message": msg,
+                        "timestamp": created_at,
+                        "repo": repo,
+                    }
+                )
+                if len(commits) >= limit:
+                    return commits
+        return commits
+
+    def fetch_telemetry_bundle(self) -> dict:
+        """One-shot fetch of everything the templates need.
+
+        Returns a dict with keys:
+          stats:        current snapshot (commits, stars, prs, issues, repos)
+          languages:    {lang: bytes}
+          lang_meta:    {lang: {"repos": int, "last_activity": iso_date}}
+          commit_weeks: list[int] length 52 (oldest → newest), [] if no PAT
+          flight_log:   list[dict] of recent public push events (up to 5)
+        """
+        logger.info("Fetching stats...")
+        try:
+            stats = self.fetch_stats()
+        except (requests.exceptions.RequestException, ValueError, KeyError, TypeError) as e:
+            logger.warning("Could not fetch stats (%s). Using defaults.", e)
+            stats = {"commits": 0, "stars": 0, "prs": 0, "issues": 0, "repos": 0}
+
+        logger.info("Fetching languages...")
+        try:
+            languages, lang_meta = self._fetch_languages_and_meta()
+        except (requests.exceptions.RequestException, ValueError, KeyError, TypeError) as e:
+            logger.warning("Could not fetch languages (%s). Using defaults.", e)
+            languages, lang_meta = {}, {}
+
+        logger.info("Fetching commit calendar...")
+        commit_weeks = self.fetch_commit_weeks()
+
+        logger.info("Fetching flight log...")
+        flight_log = self.fetch_flight_log()
+
+        return {
+            "stats": stats,
+            "languages": languages,
+            "lang_meta": lang_meta,
+            "commit_weeks": commit_weeks,
+            "flight_log": flight_log,
+        }

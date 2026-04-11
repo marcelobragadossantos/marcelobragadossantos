@@ -1,8 +1,171 @@
 """SVG template: Featured Systems / Projects Constellation (850x220)."""
 
+import math
+
 from generator.utils import wrap_text, deterministic_random, esc, resolve_arm_colors
 
 WIDTH, HEIGHT = 850, 220
+
+
+def _render_empty_constellation(theme: dict) -> str:
+    """Render a richer empty state that still feels like the rest of the galaxy theme.
+
+    Instead of a bare "no projects" label, draw a faint starfield with a
+    scanning circle suggesting the constellation is forming. Activated
+    whenever config.projects is empty.
+    """
+    cyan = theme.get("synapse_cyan", "#00d4ff")
+    faint = theme.get("text_faint", "#64748b")
+    # Seeded starfield for the empty state
+    count = 30
+    sx = deterministic_random("empty-x", count, 20, WIDTH - 20)
+    sy = deterministic_random("empty-y", count, 55, HEIGHT - 25)
+    sr = deterministic_random("empty-r", count, 0.5, 1.6)
+    so = deterministic_random("empty-o", count, 0.1, 0.35)
+    sd = deterministic_random("empty-d", count, 4, 9)
+    stars = []
+    for i in range(count):
+        stars.append(
+            f'  <circle cx="{sx[i]:.1f}" cy="{sy[i]:.1f}" r="{sr[i]:.2f}" '
+            f'fill="{faint}" opacity="{so[i]:.2f}">'
+            f'<animate attributeName="opacity" values="{so[i]:.2f};{min(so[i] * 2.5, 0.7):.2f};{so[i]:.2f}" '
+            f'dur="{sd[i]:.1f}s" repeatCount="indefinite"/>'
+            f'</circle>'
+        )
+    stars_str = "\n".join(stars)
+
+    cx, cy = WIDTH / 2, HEIGHT / 2 + 10
+
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
+  <rect x="0.5" y="0.5" width="{WIDTH - 1}" height="{HEIGHT - 1}" rx="12" ry="12"
+        fill="{theme['nebula']}" stroke="{theme['star_dust']}" stroke-width="1"/>
+
+  <text x="30" y="38" fill="{faint}" font-size="11" font-family="monospace" letter-spacing="3">FEATURED SYSTEMS</text>
+  <text x="{WIDTH - 30}" y="38" fill="{faint}" font-size="10" font-family="monospace" text-anchor="end" opacity="0.5">SCANNING…</text>
+
+{stars_str}
+
+  <!-- Scanning halo -->
+  <circle cx="{cx}" cy="{cy}" r="30" fill="none" stroke="{cyan}" stroke-width="0.8" stroke-dasharray="4,4" opacity="0.25">
+    <animate attributeName="r" values="20;60;20" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.08;0.3;0.08" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="{cx}" cy="{cy}" r="3" fill="{cyan}" opacity="0.7">
+    <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <text x="{cx}" y="{cy + 58}" text-anchor="middle" fill="{faint}" font-size="11"
+        font-family="monospace" opacity="0.7">No featured systems yet — configure projects in config.yml</text>
+</svg>'''
+
+
+def _build_scatter_constellation(projects, galaxy_arms, card_colors, theme):
+    """Render projects as stars in a scatter constellation.
+
+    Position is deterministic via `deterministic_random` so the layout is
+    stable across runs. Lines connect projects that share 2+ stack items.
+    The brightest (most-starred) project gets a pulsing halo.
+    """
+    parts = []
+    n = len(projects)
+
+    # Layout area inside the card
+    pad_x = 60
+    pad_y = 70
+    area_w = WIDTH - 2 * pad_x
+    area_h = HEIGHT - pad_y - 30
+
+    # Scatter positions (deterministic by project repo name)
+    positions = []
+    for i, proj in enumerate(projects):
+        seed = f"proj-{proj.get('repo', i)}"
+        px = deterministic_random(seed + "-x", 1, pad_x, pad_x + area_w)[0]
+        py = deterministic_random(seed + "-y", 1, pad_y, pad_y + area_h)[0]
+        positions.append((px, py))
+
+    # Find the most-starred project for halo emphasis
+    def _stars_of(p):
+        return p.get("stars", 0) or 0
+
+    max_idx = 0
+    if n > 1:
+        max_idx = max(range(n), key=lambda i: _stars_of(projects[i]))
+
+    # Collect stack items per project for connection matching
+    def _stack_of(p):
+        # Accept either 'stack' or 'tech' key, fallback to galaxy_arms items
+        stack = p.get("stack") or p.get("tech") or []
+        return {item.lower() for item in stack}
+
+    # Connection lines (projects sharing 2+ stack items)
+    for i in range(n):
+        for j in range(i + 1, n):
+            shared = _stack_of(projects[i]) & _stack_of(projects[j])
+            if len(shared) >= 2:
+                x1, y1 = positions[i]
+                x2, y2 = positions[j]
+                parts.append(
+                    f'  <line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
+                    f'stroke="{theme["text_faint"]}" stroke-width="0.8" '
+                    f'stroke-dasharray="2,4" opacity="0.35"/>'
+                )
+
+    # Stars
+    for i, proj in enumerate(projects):
+        x, y = positions[i]
+        color = card_colors[i]
+        stars_count = _stars_of(proj)
+        # Radius scales with sqrt(stars+1)
+        r = 4 + math.sqrt(stars_count + 1) * 1.3
+        r = min(r, 12)
+
+        # Halo on the most-starred
+        if i == max_idx and n >= 1:
+            parts.append(
+                f'  <circle cx="{x:.1f}" cy="{y:.1f}" r="{r + 10:.1f}" fill="none" '
+                f'stroke="{color}" stroke-width="0.8" opacity="0.3">'
+                f'<animate attributeName="r" values="{r + 6:.1f};{r + 14:.1f};{r + 6:.1f}" '
+                f'dur="3s" repeatCount="indefinite"/>'
+                f'<animate attributeName="opacity" values="0.15;0.45;0.15" '
+                f'dur="3s" repeatCount="indefinite"/>'
+                f'</circle>'
+            )
+
+        # Outer glow
+        parts.append(
+            f'  <circle cx="{x:.1f}" cy="{y:.1f}" r="{r + 3:.1f}" fill="{color}" opacity="0.18"/>'
+        )
+        # Core star
+        parts.append(
+            f'  <circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{color}" opacity="0.9">'
+            f'<animate attributeName="opacity" values="0.7;1;0.7" '
+            f'dur="{3 + (i % 3)}s" begin="{i * 0.3:.2f}s" repeatCount="indefinite"/>'
+            f'</circle>'
+        )
+        # White center pin
+        parts.append(
+            f'  <circle cx="{x:.1f}" cy="{y:.1f}" r="1.5" fill="#ffffff" opacity="0.9"/>'
+        )
+
+        # Label
+        repo_name = proj.get("repo", "")
+        if "/" in repo_name:
+            repo_name = repo_name.split("/", 1)[-1]
+        label = esc(repo_name)
+        parts.append(
+            f'  <text x="{x:.1f}" y="{y + r + 14:.1f}" text-anchor="middle" '
+            f'fill="{theme["text_bright"]}" font-size="11" font-weight="bold" '
+            f'font-family="sans-serif">{label}</text>'
+        )
+        # Stars count
+        if stars_count > 0:
+            parts.append(
+                f'  <text x="{x:.1f}" y="{y + r + 26:.1f}" text-anchor="middle" '
+                f'fill="{theme["text_faint"]}" font-size="9" '
+                f'font-family="monospace">★ {stars_count}</text>'
+            )
+
+    return "\n".join(parts)
 
 
 def _build_defs(n, card_width, gap, card_colors, theme):
@@ -299,76 +462,48 @@ def render(projects: list, galaxy_arms: list, theme: dict) -> str:
     """Render the projects constellation SVG.
 
     Args:
-        projects: list of project dicts with repo, arm, description
+        projects: list of project dicts with repo, arm, description, stars, stack
         galaxy_arms: list of arm configs for color mapping
         theme: color palette dict
     """
     all_arm_colors = resolve_arm_colors(galaxy_arms, theme)
 
-    n = min(len(projects), 3)
+    n = len(projects)
 
     if n == 0:
-        # No projects — render an empty card
-        return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
-  <rect x="0.5" y="0.5" width="{WIDTH - 1}" height="{HEIGHT - 1}" rx="12" ry="12"
-        fill="{theme['nebula']}" stroke="{theme['star_dust']}" stroke-width="1"/>
-  <text x="{WIDTH / 2}" y="{HEIGHT / 2}" fill="{theme['text_faint']}" font-size="12"
-        font-family="monospace" text-anchor="middle" dominant-baseline="middle">No featured projects configured</text>
-</svg>'''
+        return _render_empty_constellation(theme)
 
-    # Adaptive card sizing
-    if n == 2:
-        card_width = 340
-    else:
-        card_width = 240
-    total_cards_width = card_width * n
-    gap = (WIDTH - total_cards_width) / (n + 1)
+    # Cap projects for layout stability, but allow up to 8 stars in the scatter
+    n = min(n, 8)
+    projects = projects[:n]
 
-    # Resolve arm indices and colors per card
-    card_arms = []
+    # Resolve arm colors per project
     card_colors = []
-    for i in range(n):
-        proj = projects[i]
+    for proj in projects:
         arm_idx = proj.get("arm", 0)
         arm_idx = arm_idx if arm_idx < len(galaxy_arms) else 0
-        card_arms.append(arm_idx)
         card_colors.append(all_arm_colors[arm_idx])
 
-    # ── Layer 0: Defs ──
-    defs_str = _build_defs(n, card_width, gap, card_colors, theme)
+    # ── Layer 0: Defs (reuse existing helper for glows / css) ──
+    # For the scatter view we still want the glow filters and the card-appear
+    # keyframes. Pass n and reasonable defaults for card_width/gap since those
+    # are only used by a handful of defs we don't emit for the scatter.
+    defs_str = _build_defs(n, 240, 20, card_colors, theme)
 
-    # ── Layer 1: Background rect ──
     bg = (
         f'  <rect x="0.5" y="0.5" width="{WIDTH - 1}" height="{HEIGHT - 1}" '
         f'rx="12" ry="12" fill="{theme["nebula"]}" '
         f'stroke="{theme["star_dust"]}" stroke-width="1"/>'
     )
 
-    # ── Layer 2: Star field (25 particles) ──
     stars_str = _build_starfield(n, WIDTH, HEIGHT, card_colors, theme)
-
-    # ── Layer 3: Faint grid overlay ──
     grid_str = _build_grid_overlay(WIDTH, HEIGHT, theme)
-
-    # ── Layer 4: Connection lines between cards ──
-    conn_str = _build_connections(n, card_width, gap)
-
-    # ── Layer 5: Title area ──
     title_str = _build_title_area(n, WIDTH, HEIGHT, theme)
 
-    # ── Layer 6: Project cards ──
-    cards = []
-    for i in range(n):
-        proj = projects[i]
-        arm = galaxy_arms[card_arms[i]]
-        color = card_colors[i]
-        card_x = gap + i * (card_width + gap)
+    # ── Layer: scatter constellation (replaces the old card rail) ──
+    scatter_str = _build_scatter_constellation(projects, galaxy_arms, card_colors, theme)
 
-        cards.append(_build_project_card(i, proj, arm, color, card_width, card_x, theme))
-
-    cards_str = "\n".join(cards)
-
-    # ── Layer 7: Global scan line ──
+    # ── Global scan line ──
     scan_line = _build_scan_line(WIDTH, theme)
 
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">
@@ -385,14 +520,11 @@ def render(projects: list, galaxy_arms: list, theme: dict) -> str:
   <!-- Grid overlay -->
 {grid_str}
 
-  <!-- Connection lines -->
-{conn_str}
-
   <!-- Title area -->
 {title_str}
 
-  <!-- Project cards -->
-{cards_str}
+  <!-- Projects scatter constellation -->
+{scatter_str}
 
   <!-- Global scan line -->
 {scan_line}
