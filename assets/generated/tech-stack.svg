@@ -14,7 +14,12 @@
   <!-- Right: Focus Sectors -->
   <text x="460" y="38" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="3">FOCUS SECTORS</text>
 
-
+    <circle cx="260" cy="135" r="8" fill="#00d4ff" opacity="0.25">
+      <animate attributeName="r" values="6;9;6" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.2;0.45;0.2" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="260" cy="135" r="3" fill="#00d4ff"/>
+    <text x="260" y="255" text-anchor="middle" fill="#64748b" font-size="10" font-family="monospace" opacity="0.6">no language data</text>
 
     <circle cx="637" cy="140" r="22" fill="none" stroke="#64748b" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.25"/>
     <circle cx="637" cy="140" r="44" fill="none" stroke="#64748b" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.25"/>
