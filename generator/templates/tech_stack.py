@@ -7,35 +7,120 @@ from generator.utils import calculate_language_percentages, esc, svg_arc_path, r
 WIDTH = 850
 
 
-def _build_language_bars(lang_data, theme, left_x, start_y):
-    """Build the language bar elements (left side of the card).
+def _build_language_orbit(lang_data, lang_meta, theme, cx, cy):
+    """Build the language orbit view (left side of the card).
+
+    Each language is rendered as a planet on its own orbit ring around a
+    pulsing core. Orbit radius grows with index (top languages closest in),
+    planet radius scales with sqrt(percentage), and rotation speed is
+    inversely proportional to the number of repos using that language.
 
     Args:
-        lang_data: list of dicts with name, percentage, color
+        lang_data: list of dicts with name, percentage, color (from
+            calculate_language_percentages)
+        lang_meta: dict of {lang_name: {repos, last_activity}} — optional,
+            used to vary orbit speed; may be None or empty
         theme: color palette dict
-        left_x: x offset for the bar group
-        start_y: y offset for the first bar
+        cx, cy: orbit center
 
     Returns:
-        str of SVG elements for the language bars
+        str of SVG elements for the language orbit
     """
-    bar_lines = []
-    bar_max_width = 200
+    lang_meta = lang_meta or {}
+    core_color = theme.get("synapse_cyan", "#00d4ff")
+
+    parts = []
+
+    # Pulsing core
+    parts.append(
+        f'    <circle cx="{cx}" cy="{cy}" r="8" fill="{core_color}" opacity="0.25">'
+        f'\n      <animate attributeName="r" values="6;9;6" dur="3s" repeatCount="indefinite"/>'
+        f'\n      <animate attributeName="opacity" values="0.2;0.45;0.2" dur="3s" repeatCount="indefinite"/>'
+        f'\n    </circle>'
+        f'\n    <circle cx="{cx}" cy="{cy}" r="3" fill="{core_color}"/>'
+    )
+
+    if not lang_data:
+        parts.append(
+            f'    <text x="{cx}" y="{cy + 120}" text-anchor="middle" fill="{theme["text_faint"]}" '
+            f'font-size="10" font-family="monospace" opacity="0.6">no language data</text>'
+        )
+        return "\n".join(parts)
+
+    # Orbit rings and planets
+    base_radius = 34
+    ring_step = 18
+    # Rings are drawn behind the planets
+    ring_parts = []
+    planet_parts = []
+    legend_parts = []
+
+    # Legend column on the far left (inside the left pane)
+    legend_x = 25
+    legend_start_y = 70
+    legend_line_h = 16
 
     for i, lang in enumerate(lang_data):
-        y = start_y + i * 22
-        bar_w = max(4, (lang["percentage"] / 100) * bar_max_width)
-        delay = f"{i * 0.1}s"
+        orbit_r = base_radius + i * ring_step
+        # Planet size from percentage (clamp 4..12)
+        pct = max(lang["percentage"], 0.5)
+        planet_r = min(12, max(4, 3 + (pct ** 0.5) * 1.2))
+        planet_color = lang["color"]
+        name = lang["name"]
 
-        bar_lines.append(f'''    <g transform="translate({left_x}, {y})">
-      <text x="0" y="0" fill="{theme['text_dim']}" font-size="11" font-family="sans-serif" dominant-baseline="middle">{esc(lang['name'])}</text>
-      <rect x="110" y="-6" width="{bar_w}" height="12" rx="3" fill="{lang['color']}" opacity="0.85">
-        <animate attributeName="width" from="0" to="{bar_w}" dur="0.8s" begin="{delay}" fill="freeze"/>
-      </rect>
-      <text x="320" y="0" fill="{theme['text_faint']}" font-size="10" font-family="monospace" dominant-baseline="middle">{lang['percentage']}%</text>
-    </g>''')
+        # Orbit speed from repos count (more repos = faster)
+        meta = lang_meta.get(name) or {}
+        repo_count = meta.get("repos", 0) or 0
+        # clamp speed: 12s (very active) to 45s (static)
+        orbit_dur = max(12, 45 - repo_count * 2)
 
-    return "\n".join(bar_lines)
+        # Starting angle spread around the circle
+        start_deg = (i * 47) % 360  # deterministic but varied
+        # Initial position before rotation (for the static planet placement
+        # that then gets rotated by animateTransform)
+        import math as _m
+        sx = cx + orbit_r * _m.cos(_m.radians(start_deg))
+        sy = cy + orbit_r * _m.sin(_m.radians(start_deg))
+
+        # Orbit ring (behind)
+        ring_parts.append(
+            f'    <circle cx="{cx}" cy="{cy}" r="{orbit_r}" '
+            f'fill="none" stroke="{planet_color}" stroke-width="0.6" '
+            f'stroke-dasharray="2,3" opacity="0.25"/>'
+        )
+
+        # Planet group — the whole group rotates around (cx, cy)
+        planet_parts.append(
+            f'''    <g>
+      <animateTransform attributeName="transform" type="rotate"
+        from="0 {cx} {cy}" to="360 {cx} {cy}"
+        dur="{orbit_dur}s" repeatCount="indefinite"/>
+      <circle cx="{sx:.1f}" cy="{sy:.1f}" r="{planet_r:.1f}" fill="{planet_color}" opacity="0.9">
+        <animate attributeName="opacity" values="0.75;1;0.75" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="{sx:.1f}" cy="{sy:.1f}" r="{planet_r + 2:.1f}" fill="{planet_color}" opacity="0.18"/>
+    </g>'''
+        )
+
+        # Legend row (static, doesn't rotate)
+        ly = legend_start_y + i * legend_line_h
+        legend_parts.append(
+            f'    <circle cx="{legend_x + 4}" cy="{ly - 4}" r="4" fill="{planet_color}" opacity="0.9"/>'
+        )
+        legend_parts.append(
+            f'    <text x="{legend_x + 14}" y="{ly}" fill="{theme["text_dim"]}" '
+            f'font-size="10" font-family="monospace">{esc(name)}</text>'
+        )
+        legend_parts.append(
+            f'    <text x="{legend_x + 110}" y="{ly}" fill="{theme["text_faint"]}" '
+            f'font-size="10" font-family="monospace">{lang["percentage"]}%</text>'
+        )
+
+    parts.extend(ring_parts)
+    parts.extend(planet_parts)
+    parts.extend(legend_parts)
+
+    return "\n".join(parts)
 
 
 def _build_radar_grid(rcx, rcy, grid_rings, theme):
@@ -230,6 +315,7 @@ def render(
     theme: dict,
     exclude: list,
     max_display: int,
+    lang_meta: dict = None,
 ) -> str:
     """Render the tech stack SVG.
 
@@ -239,14 +325,15 @@ def render(
         theme: color palette dict
         exclude: languages to exclude
         max_display: max languages to show
+        lang_meta: optional {lang_name: {repos, last_activity}} to vary
+            orbit rotation speed by activity
     """
     lang_data = calculate_language_percentages(languages, exclude, max_display)
 
-    # Left side: Language bars
-    left_x = 30
-    start_y = 65
-
-    bars_str = _build_language_bars(lang_data, theme, left_x, start_y)
+    # Left side: Language Orbit (center is roughly at x=240 within left pane)
+    orbit_cx = 260
+    orbit_cy = 135
+    orbit_str = _build_language_orbit(lang_data, lang_meta, theme, orbit_cx, orbit_cy)
 
     # Right side: Focus Sectors radar
     all_arm_colors = resolve_arm_colors(galaxy_arms, theme)
@@ -271,10 +358,11 @@ def render(
     rcy = badge_start_y + radius + 10  # center y
     grid_rings = [22, 44, 65]
 
-    # Dynamic height
-    lang_height = start_y + len(lang_data) * 22 + 20
+    # Dynamic height — the orbit view needs room for the outermost ring
+    max_orbit_r = 34 + max(len(lang_data) - 1, 0) * 18 + 14
+    orbit_height = orbit_cy + max_orbit_r + 20
     radar_height = rcy + radius + 35
-    height = max(200, lang_height, radar_height)
+    height = max(240, orbit_height, radar_height)
 
     # Build radar SVG elements
     radar_parts = []
@@ -301,7 +389,7 @@ def render(
   <!-- Right: Focus Sectors -->
   <text x="460" y="38" fill="{theme['text_faint']}" font-size="11" font-family="monospace" letter-spacing="3">FOCUS SECTORS</text>
 
-{bars_str}
+{orbit_str}
 
 {radar_str}
 </svg>'''

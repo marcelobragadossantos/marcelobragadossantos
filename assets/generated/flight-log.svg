@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="180" viewBox="0 0 850 180">
+  <defs>
+    <linearGradient id="flight-scanline" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#00d4ff" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="flight-clip">
+      <rect x="0.5" y="0.5" width="849" height="179" rx="12" ry="12"/>
+    </clipPath>
+  </defs>
+
+  <!-- Card background -->
+  <rect x="0.5" y="0.5" width="849" height="179" rx="12" ry="12"
+        fill="#080c14" stroke="#1a2332" stroke-width="1"/>
+
+  <!-- Section title -->
+  <text x="30" y="28" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="3">FLIGHT LOG</text>
+
+  <!-- Prompt line -->
+  <text x="30" y="55" fill="#00d4ff" font-size="11" font-family="monospace">$ git log --author=marcelobragadossantos -5</text>
+
+  <!-- Log entries -->
+    <text x="30" y="78" fill="#94a3b8" font-size="11"
+        font-family="monospace" opacity="0.7">
+      # No recent activity in the last 90 days.
+    </text>
+
+  <!-- CRT scanline sweep -->
+  <g clip-path="url(#flight-clip)">
+    <rect x="0" y="-30" width="850" height="30" fill="url(#flight-scanline)">
+      <animateTransform attributeName="transform" type="translate"
+        from="0 0" to="0 210" dur="8s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+</svg>

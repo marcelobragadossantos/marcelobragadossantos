@@ -1,6 +1,12 @@
 """SVG Builder — orchestrator connecting config, stats, and templates."""
 
-from generator.templates import galaxy_header, stats_card, tech_stack, projects_constellation
+from generator.templates import (
+    flight_log,
+    galaxy_header,
+    projects_constellation,
+    stats_card,
+    tech_stack,
+)
 
 
 class SVGBuilder:
@@ -10,10 +16,23 @@ class SVGBuilder:
     which resolves theme defaults and applies missing optional fields.
     """
 
-    def __init__(self, config: dict, stats: dict, languages: dict):
+    def __init__(
+        self,
+        config: dict,
+        stats: dict,
+        languages: dict,
+        previous_stats: dict = None,
+        commit_weeks: list = None,
+        lang_meta: dict = None,
+        flight_log: list = None,
+    ):
         self.config = config
         self.stats = stats
         self.languages = languages
+        self.previous_stats = previous_stats or {}
+        self.commit_weeks = commit_weeks or []
+        self.lang_meta = lang_meta or {}
+        self.flight_log = flight_log or []
         self.theme = config["theme"]
         self.galaxy_arms = config.get("galaxy_arms", [])
         self.projects = config.get("projects", [])
@@ -32,6 +51,8 @@ class SVGBuilder:
             stats=self.stats,
             metrics=metrics,
             theme=self.theme,
+            previous_stats=self.previous_stats,
+            commit_weeks=self.commit_weeks,
         )
 
     def render_tech_stack(self) -> str:
@@ -42,6 +63,14 @@ class SVGBuilder:
             theme=self.theme,
             exclude=lang_config.get("exclude", []),
             max_display=lang_config.get("max_display", 8),
+            lang_meta=self.lang_meta,
+        )
+
+    def render_flight_log(self) -> str:
+        return flight_log.render(
+            entries=self.flight_log,
+            theme=self.theme,
+            username=self.config.get("username", ""),
         )
 
     def render_projects_constellation(self) -> str:

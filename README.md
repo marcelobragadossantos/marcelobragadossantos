@@ -14,6 +14,12 @@
 <br/>
 
 <div align="center">
+  <img src="./assets/generated/flight-log.svg" width="850" alt="Flight Log"/>
+</div>
+
+<br/>
+
+<div align="center">
   <img src="./assets/generated/tech-stack.svg" width="850" alt="Tech Stack"/>
 </div>
 
@@ -44,3 +50,29 @@ Certificacoes relevantes na area de TI e metodologias ageis.
     <img src="https://img.shields.io/badge/-Instagram-080c14?style=for-the-badge&logo=instagram&logoColor=ffb020" alt="Instagram"/>
   </a>
 </div>
+
+<!--
+## Configurando o GH_TOKEN (para telemetria completa)
+
+O workflow `.github/workflows/generate-profile.yml` prefere o secret
+`GH_TOKEN` (PAT) e cai pro `GITHUB_TOKEN` padrão se não existir.
+
+- **Sem PAT** (default GITHUB_TOKEN): o generator detecta que o token é do
+  bot `github-actions[bot]` e usa os endpoints públicos. Você verá apenas
+  stats e linguagens de repositórios públicos.
+- **Com PAT** (`GH_TOKEN` configurado): o generator inclui repos privados,
+  contribuições privadas e o calendário de commits (sparkline).
+
+Para configurar:
+
+1. Gere um fine-grained ou classic PAT com scopes `read:user` + `repo`.
+2. Em **Settings → Secrets and variables → Actions → New repository secret**:
+   - Name: `GH_TOKEN`
+   - Value: o PAT gerado
+3. Em **Settings → Profile → Include private contributions on my profile**:
+   marque a opção se quiser que commits privados entrem na contagem.
+
+Depois é só rodar o workflow manualmente via **Actions → Generate Profile
+SVGs → Run workflow** para regenerar sem esperar o cron de 12h.
+-->
+
