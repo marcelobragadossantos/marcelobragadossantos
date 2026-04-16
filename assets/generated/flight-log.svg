@@ -18,39 +18,13 @@
   <text x="30" y="28" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="3">FLIGHT LOG</text>
 
   <!-- Prompt line -->
-  <text x="30" y="55" fill="#00d4ff" font-size="11" font-family="monospace">$ git log --author=galaxy-dev -5</text>
+  <text x="30" y="55" fill="#00d4ff" font-size="11" font-family="monospace">$ git log --author=marcelobragadossantos -5</text>
 
   <!-- Log entries -->
-    <g opacity="0">
-      <text x="30" y="78" fill="#64748b" font-size="11" font-family="monospace">[2026-04-10 14:32]</text>
-      <text x="160" y="78" fill="#a78bfa" font-size="11" font-family="monospace">a1b2c3d</text>
-      <text x="225" y="78" fill="#00d4ff" font-size="11" font-family="monospace">feat(api): add telemetry bundle endpoint</text>
-      <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="0.40s" fill="freeze"/>
-    </g>
-    <g opacity="0">
-      <text x="30" y="96" fill="#64748b" font-size="11" font-family="monospace">[2026-04-09 09:11]</text>
-      <text x="160" y="96" fill="#a78bfa" font-size="11" font-family="monospace">e4f5g6h</text>
-      <text x="225" y="96" fill="#ffb020" font-size="11" font-family="monospace">fix(auth): token refresh race condition</text>
-      <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="0.75s" fill="freeze"/>
-    </g>
-    <g opacity="0">
-      <text x="30" y="114" fill="#64748b" font-size="11" font-family="monospace">[2026-04-08 16:45]</text>
-      <text x="160" y="114" fill="#a78bfa" font-size="11" font-family="monospace">i7j8k9l</text>
-      <text x="225" y="114" fill="#94a3b8" font-size="11" font-family="monospace">chore: bump deps</text>
-      <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.10s" fill="freeze"/>
-    </g>
-    <g opacity="0">
-      <text x="30" y="132" fill="#64748b" font-size="11" font-family="monospace">[2026-04-07 11:20]</text>
-      <text x="160" y="132" fill="#a78bfa" font-size="11" font-family="monospace">m0n1o2p</text>
-      <text x="225" y="132" fill="#a78bfa" font-size="11" font-family="monospace">refactor: extract telemetry bundle</text>
-      <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.45s" fill="freeze"/>
-    </g>
-    <g opacity="0">
-      <text x="30" y="150" fill="#64748b" font-size="11" font-family="monospace">[2026-04-06 08:00]</text>
-      <text x="160" y="150" fill="#a78bfa" font-size="11" font-family="monospace">q3r4s5t</text>
-      <text x="225" y="150" fill="#94a3b8" font-size="11" font-family="monospace">docs: GH_TOKEN setup instructions</text>
-      <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="1.80s" fill="freeze"/>
-    </g>
+    <text x="30" y="78" fill="#94a3b8" font-size="11"
+        font-family="monospace" opacity="0.7">
+      # No recent activity in the last 90 days.
+    </text>
 
   <!-- CRT scanline sweep -->
   <g clip-path="url(#flight-clip)">

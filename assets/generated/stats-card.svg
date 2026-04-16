@@ -37,9 +37,9 @@
       <text x="0" y="2" text-anchor="middle" fill="#00d4ff" font-size="28" font-weight="bold" font-family="sans-serif" opacity="0.35" filter="url(#num-glow)">16</text>
       <text x="0" y="2" text-anchor="middle" fill="#f1f5f9" font-size="28" font-weight="bold" font-family="sans-serif">16</text>
       <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="1">Commits</text>
-      <text x="0" y="38" text-anchor="middle" fill="#00d4ff" font-size="10" font-family="monospace" letter-spacing="0.5">▲ +16</text>
-      <polygon points="-65.0,70.0 -65.0,70.0 -62.5,70.0 -59.9,70.0 -57.4,70.0 -54.8,70.0 -52.3,58.8 -49.7,70.0 -47.2,70.0 -44.6,70.0 -42.1,70.0 -39.5,70.0 -37.0,70.0 -34.4,70.0 -31.9,70.0 -29.3,70.0 -26.8,70.0 -24.2,70.0 -21.7,70.0 -19.1,70.0 -16.6,70.0 -14.0,70.0 -11.5,70.0 -8.9,70.0 -6.4,70.0 -3.8,70.0 -1.3,70.0 1.3,70.0 3.8,70.0 6.4,70.0 8.9,70.0 11.5,61.0 14.0,70.0 16.6,70.0 19.1,70.0 21.7,70.0 24.2,70.0 26.8,70.0 29.3,70.0 31.9,70.0 34.4,70.0 37.0,70.0 39.5,70.0 42.1,70.0 44.6,52.0 47.2,70.0 49.7,70.0 52.3,70.0 54.8,70.0 57.4,65.5 59.9,65.5 62.5,61.0 65.0,63.2 65.0,70.0" fill="#00d4ff" fill-opacity="0.12"/>
-      <polyline points="-65.0,70.0 -62.5,70.0 -59.9,70.0 -57.4,70.0 -54.8,70.0 -52.3,58.8 -49.7,70.0 -47.2,70.0 -44.6,70.0 -42.1,70.0 -39.5,70.0 -37.0,70.0 -34.4,70.0 -31.9,70.0 -29.3,70.0 -26.8,70.0 -24.2,70.0 -21.7,70.0 -19.1,70.0 -16.6,70.0 -14.0,70.0 -11.5,70.0 -8.9,70.0 -6.4,70.0 -3.8,70.0 -1.3,70.0 1.3,70.0 3.8,70.0 6.4,70.0 8.9,70.0 11.5,61.0 14.0,70.0 16.6,70.0 19.1,70.0 21.7,70.0 24.2,70.0 26.8,70.0 29.3,70.0 31.9,70.0 34.4,70.0 37.0,70.0 39.5,70.0 42.1,70.0 44.6,52.0 47.2,70.0 49.7,70.0 52.3,70.0 54.8,70.0 57.4,65.5 59.9,65.5 62.5,61.0 65.0,63.2" fill="none" stroke="#00d4ff" stroke-width="1.2" stroke-linejoin="round" opacity="0.85"/>
+      <text x="0" y="38" text-anchor="middle" fill="#ffb020" font-size="10" font-family="monospace" letter-spacing="0.5">▼ -1.8k</text>
+      <polygon points="-65.0,70.0 -65.0,70.0 -62.5,70.0 -59.9,70.0 -57.4,70.0 -54.8,70.0 -52.3,58.8 -49.7,70.0 -47.2,70.0 -44.6,70.0 -42.1,70.0 -39.5,70.0 -37.0,70.0 -34.4,70.0 -31.9,70.0 -29.3,70.0 -26.8,70.0 -24.2,70.0 -21.7,70.0 -19.1,70.0 -16.6,70.0 -14.0,70.0 -11.5,70.0 -8.9,70.0 -6.4,70.0 -3.8,70.0 -1.3,70.0 1.3,70.0 3.8,70.0 6.4,70.0 8.9,70.0 11.5,61.0 14.0,70.0 16.6,70.0 19.1,70.0 21.7,70.0 24.2,70.0 26.8,70.0 29.3,70.0 31.9,70.0 34.4,70.0 37.0,70.0 39.5,70.0 42.1,70.0 44.6,52.0 47.2,70.0 49.7,70.0 52.3,70.0 54.8,70.0 57.4,65.5 59.9,65.5 62.5,61.0 65.0,61.0 65.0,70.0" fill="#00d4ff" fill-opacity="0.12"/>
+      <polyline points="-65.0,70.0 -62.5,70.0 -59.9,70.0 -57.4,70.0 -54.8,70.0 -52.3,58.8 -49.7,70.0 -47.2,70.0 -44.6,70.0 -42.1,70.0 -39.5,70.0 -37.0,70.0 -34.4,70.0 -31.9,70.0 -29.3,70.0 -26.8,70.0 -24.2,70.0 -21.7,70.0 -19.1,70.0 -16.6,70.0 -14.0,70.0 -11.5,70.0 -8.9,70.0 -6.4,70.0 -3.8,70.0 -1.3,70.0 1.3,70.0 3.8,70.0 6.4,70.0 8.9,70.0 11.5,61.0 14.0,70.0 16.6,70.0 19.1,70.0 21.7,70.0 24.2,70.0 26.8,70.0 29.3,70.0 31.9,70.0 34.4,70.0 37.0,70.0 39.5,70.0 42.1,70.0 44.6,52.0 47.2,70.0 49.7,70.0 52.3,70.0 54.8,70.0 57.4,65.5 59.9,65.5 62.5,61.0 65.0,61.0" fill="none" stroke="#00d4ff" stroke-width="1.2" stroke-linejoin="round" opacity="0.85"/>
     </g>
     <g class="metric-cell" transform="translate(255.0, 105)">
       <g transform="translate(-8, -30) scale(1)">
@@ -50,7 +50,7 @@
       <text x="0" y="2" text-anchor="middle" fill="#ffb020" font-size="28" font-weight="bold" font-family="sans-serif" opacity="0.35" filter="url(#num-glow)">0</text>
       <text x="0" y="2" text-anchor="middle" fill="#f1f5f9" font-size="28" font-weight="bold" font-family="sans-serif">0</text>
       <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="1">Stars</text>
-      <text x="0" y="38" text-anchor="middle" fill="#64748b" font-size="10" font-family="monospace" letter-spacing="0.5">· +0</text>
+      <text x="0" y="38" text-anchor="middle" fill="#ffb020" font-size="10" font-family="monospace" letter-spacing="0.5">▼ -342</text>
 
     </g>
     <g class="metric-cell" transform="translate(425.0, 105)">
@@ -62,7 +62,7 @@
       <text x="0" y="2" text-anchor="middle" fill="#a78bfa" font-size="28" font-weight="bold" font-family="sans-serif" opacity="0.35" filter="url(#num-glow)">11</text>
       <text x="0" y="2" text-anchor="middle" fill="#f1f5f9" font-size="28" font-weight="bold" font-family="sans-serif">11</text>
       <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="1">PRs</text>
-      <text x="0" y="38" text-anchor="middle" fill="#00d4ff" font-size="10" font-family="monospace" letter-spacing="0.5">▲ +11</text>
+      <text x="0" y="38" text-anchor="middle" fill="#ffb020" font-size="10" font-family="monospace" letter-spacing="0.5">▼ -145</text>
 
     </g>
     <g class="metric-cell" transform="translate(595.0, 105)">
@@ -74,7 +74,7 @@
       <text x="0" y="2" text-anchor="middle" fill="#00d4ff" font-size="28" font-weight="bold" font-family="sans-serif" opacity="0.35" filter="url(#num-glow)">0</text>
       <text x="0" y="2" text-anchor="middle" fill="#f1f5f9" font-size="28" font-weight="bold" font-family="sans-serif">0</text>
       <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="1">Issues</text>
-      <text x="0" y="38" text-anchor="middle" fill="#64748b" font-size="10" font-family="monospace" letter-spacing="0.5">· +0</text>
+      <text x="0" y="38" text-anchor="middle" fill="#ffb020" font-size="10" font-family="monospace" letter-spacing="0.5">▼ -89</text>
 
     </g>
     <g class="metric-cell" transform="translate(765.0, 105)">
@@ -86,7 +86,7 @@
       <text x="0" y="2" text-anchor="middle" fill="#a78bfa" font-size="28" font-weight="bold" font-family="sans-serif" opacity="0.35" filter="url(#num-glow)">54</text>
       <text x="0" y="2" text-anchor="middle" fill="#f1f5f9" font-size="28" font-weight="bold" font-family="sans-serif">54</text>
       <text x="0" y="20" text-anchor="middle" fill="#64748b" font-size="11" font-family="monospace" letter-spacing="1">Repos</text>
-      <text x="0" y="38" text-anchor="middle" fill="#00d4ff" font-size="10" font-family="monospace" letter-spacing="0.5">▲ +54</text>
+      <text x="0" y="38" text-anchor="middle" fill="#00d4ff" font-size="10" font-family="monospace" letter-spacing="0.5">▲ +12</text>
 
     </g>
 </svg>
