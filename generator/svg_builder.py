@@ -1,6 +1,7 @@
 """SVG Builder — orchestrator connecting config, stats, and templates."""
 
 from generator.templates import (
+    contribution_graph,
     flight_log,
     galaxy_header,
     projects_constellation,
@@ -77,5 +78,11 @@ class SVGBuilder:
         return projects_constellation.render(
             projects=self.projects,
             galaxy_arms=self.galaxy_arms,
+            theme=self.theme,
+        )
+
+    def render_contribution_graph(self) -> str:
+        return contribution_graph.render(
+            commit_weeks=self.commit_weeks,
             theme=self.theme,
         )

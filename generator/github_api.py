@@ -393,17 +393,23 @@ class GitHubAPI:
         return result[-52:]
 
     def fetch_flight_log(self, limit: int = 5) -> list:
-        """Fetch the most recent public push events as a commit log.
+        """Fetch the most recent push events as a commit log.
+
+        Uses the authenticated /users/{username}/events endpoint when a
+        matching PAT is available (includes private repo activity), otherwise
+        falls back to /events/public (public activity only).
 
         Returns a list of dicts: {sha, message, timestamp, repo}. Falls back
-        to an empty list on any error. The /events/public endpoint only
-        returns the last 90 days of activity, which is fine for a "recent
-        activity" view.
+        to an empty list on any error.
         """
+        if self.token and self._token_matches_target_user():
+            events_url = f"{self.REST_URL}/users/{self.username}/events"
+        else:
+            events_url = f"{self.REST_URL}/users/{self.username}/events/public"
         try:
             resp = self._request(
                 "GET",
-                f"{self.REST_URL}/users/{self.username}/events/public",
+                events_url,
                 params={"per_page": 100},
             )
             if resp.status_code != 200:

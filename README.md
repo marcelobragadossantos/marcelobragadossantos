@@ -1,8 +1,8 @@
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 <!--  Galaxy Profile README · Marcelo Braga dos Santos                        -->
-<!--  Os widgets de stats puxam dados REAIS do GitHub em tempo real via       -->
-<!--  serviços externos (github-readme-stats, streak-stats, activity-graph,   -->
-<!--  profile-trophy). Sem necessidade de PAT ou workflow.                    -->
+<!--  Os widgets de stats puxam dados REAIS do GitHub (incluindo repos privados) via       -->
+<!--  GitHub Actions workflow com PAT autenticado (a cada 12h) +   -->
+<!--  streak-stats e profile-trophy como serviços externos.                    -->
 <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
 
 <!-- ═══════════════════════ HERO HEADER ═══════════════════════ -->
@@ -89,14 +89,14 @@ Trabalho diariamente com pipelines de dados, dashboards executivos, automações
 </h3>
 
 <p align="center">
-  <em>Dados reais puxados em tempo real do GitHub — atualizados automaticamente a cada acesso.</em>
+  <em>Dados reais (incluindo repos privados) — atualizados a cada 12h via GitHub Actions.</em>
 </p>
 
 <div align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img height="180" alt="Stats"
-      src="https://github-readme-stats.vercel.app/api?username=marcelobragadossantos&show_icons=true&count_private=true&include_all_commits=true&hide_rank=false&rank_icon=percentile&theme=tokyonight&bg_color=0F1623&title_color=00D4FF&text_color=F1F5F9&icon_color=A78BFA&border_color=1A2332&border_radius=12&card_width=450"/>
-  </a>
+  <img src="./assets/generated/stats-card.svg" width="850" alt="Mission Telemetry"/>
+</div>
+
+<div align="center">
   <a href="https://git.io/streak-stats">
     <img height="180" alt="Streak"
       src="https://streak-stats.demolab.com?user=marcelobragadossantos&theme=tokyonight&background=0F1623&border=1A2332&stroke=00D4FF&ring=00D4FF&fire=FFB020&currStreakNum=F1F5F9&sideNums=F1F5F9&currStreakLabel=00D4FF&sideLabels=94A3B8&dates=64748B&border_radius=12&card_width=380"/>
@@ -112,10 +112,7 @@ Trabalho diariamente com pipelines de dados, dashboards executivos, automações
 </h3>
 
 <div align="center">
-  <img height="220" alt="Top Languages"
-    src="https://github-readme-stats.vercel.app/api/top-langs/?username=marcelobragadossantos&layout=donut-vertical&langs_count=8&hide=html,css,shell,makefile,tex&theme=tokyonight&bg_color=0F1623&title_color=00D4FF&text_color=F1F5F9&border_color=1A2332&border_radius=12&card_width=420"/>
-  <img height="220" alt="Compact Languages"
-    src="https://github-readme-stats.vercel.app/api/top-langs/?username=marcelobragadossantos&layout=compact&langs_count=10&hide=html,css,shell,makefile,tex&theme=tokyonight&bg_color=0F1623&title_color=00D4FF&text_color=F1F5F9&border_color=1A2332&border_radius=12&card_width=410"/>
+  <img src="./assets/generated/tech-stack.svg" width="850" alt="Language Telemetry & Focus Sectors"/>
 </div>
 
 <br/>
@@ -127,8 +124,11 @@ Trabalho diariamente com pipelines de dados, dashboards executivos, automações
 </h3>
 
 <div align="center">
-  <img width="900" alt="Activity Graph"
-    src="https://github-readme-activity-graph.vercel.app/graph?username=marcelobragadossantos&bg_color=0F1623&color=00D4FF&line=A78BFA&point=FFB020&area=true&area_color=00D4FF&hide_border=false&border_color=1A2332&border_radius=12&custom_title=Contribution%20Trajectory%20·%20Last%2031%20Days&title_color=00D4FF"/>
+  <img src="./assets/generated/contribution-graph.svg" width="850" alt="Contribution Flight Path"/>
+</div>
+
+<div align="center">
+  <img src="./assets/generated/flight-log.svg" width="850" alt="Flight Log"/>
 </div>
 
 <br/>

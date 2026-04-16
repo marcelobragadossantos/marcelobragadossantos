@@ -162,11 +162,12 @@ def generate(args):
         "tech-stack.svg": builder.render_tech_stack(),
         "flight-log.svg": builder.render_flight_log(),
         "projects-constellation.svg": builder.render_projects_constellation(),
+        "contribution-graph.svg": builder.render_contribution_graph(),
     }
 
     for filename, content in svgs.items():
         path = os.path.join(output_dir, filename)
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf-8") as f:
             f.write(content)
         logger.info("Wrote %s", path)
 
