@@ -44,7 +44,7 @@
     <text x="52" y="58.0" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">8</text>
 
   <!-- Month labels -->
-    <text x="60.0" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Apr</text>
+    <text x="60.0" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">May</text>
     <text x="119.6" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">May</text>
     <text x="179.2" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Jun</text>
     <text x="238.8" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Jul</text>
