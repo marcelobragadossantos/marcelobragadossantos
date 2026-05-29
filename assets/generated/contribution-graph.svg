@@ -24,9 +24,9 @@
 
   <!-- Summary badges -->
   <text x="820" y="32" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="end">
-    total: <tspan fill="#00d4ff" font-weight="bold">50</tspan>
+    total: <tspan fill="#00d4ff" font-weight="bold">51</tspan>
     · avg/wk: <tspan fill="#00d4ff">1</tspan>
-    · last 28d: <tspan fill="#00d4ff">22</tspan>
+    · last 28d: <tspan fill="#00d4ff">23</tspan>
   </text>
 
   <!-- Baseline -->
@@ -39,14 +39,14 @@
     <line x1="60" y1="115.0" x2="820" y2="115.0" stroke="#1a2332" stroke-width="0.5" opacity="0.6"/>
     <text x="52" y="118.0" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">11</text>
     <line x1="60" y1="85.0" x2="820" y2="85.0" stroke="#1a2332" stroke-width="0.5" opacity="0.6"/>
-    <text x="52" y="88.0" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">16</text>
+    <text x="52" y="88.0" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">17</text>
     <line x1="60" y1="55.0" x2="820" y2="55.0" stroke="#1a2332" stroke-width="0.5" opacity="0.6"/>
-    <text x="52" y="58.0" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">22</text>
+    <text x="52" y="58.0" fill="#64748b" font-size="9" font-family="monospace" text-anchor="end">23</text>
 
   <!-- Month labels -->
     <text x="60.0" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Jun</text>
     <text x="119.6" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Jul</text>
-    <text x="179.2" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Jul</text>
+    <text x="179.2" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Aug</text>
     <text x="238.8" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Aug</text>
     <text x="298.4" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Sep</text>
     <text x="358.0" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">Oct</text>
@@ -59,10 +59,10 @@
     <text x="775.3" y="191" fill="#64748b" font-size="9" font-family="monospace" text-anchor="middle">May</text>
 
   <!-- Area fill -->
-  <polygon points="60.0,175.0 60.0,175.0 74.9,175.0 89.8,175.0 104.7,175.0 119.6,175.0 134.5,175.0 149.4,175.0 164.3,175.0 179.2,175.0 194.1,175.0 209.0,175.0 223.9,175.0 238.8,175.0 253.7,175.0 268.6,175.0 283.5,175.0 298.4,175.0 313.3,175.0 328.2,175.0 343.1,175.0 358.0,175.0 372.9,175.0 387.8,175.0 402.7,175.0 417.6,153.2 432.5,175.0 447.5,175.0 462.4,175.0 477.3,175.0 492.2,175.0 507.1,175.0 522.0,175.0 536.9,175.0 551.8,175.0 566.7,175.0 581.6,175.0 596.5,175.0 611.4,131.4 626.3,175.0 641.2,175.0 656.1,175.0 671.0,175.0 685.9,164.1 700.8,164.1 715.7,153.2 730.6,147.7 745.5,158.6 760.4,175.0 775.3,175.0 790.2,175.0 805.1,175.0 820.0,55.0 820.0,175.0" fill="url(#area-grad)"/>
+  <polygon points="60.0,175.0 60.0,175.0 74.9,175.0 89.8,175.0 104.7,175.0 119.6,175.0 134.5,175.0 149.4,175.0 164.3,175.0 179.2,175.0 194.1,175.0 209.0,175.0 223.9,175.0 238.8,175.0 253.7,175.0 268.6,175.0 283.5,175.0 298.4,175.0 313.3,175.0 328.2,175.0 343.1,175.0 358.0,175.0 372.9,175.0 387.8,175.0 402.7,175.0 417.6,154.1 432.5,175.0 447.5,175.0 462.4,175.0 477.3,175.0 492.2,175.0 507.1,175.0 522.0,175.0 536.9,175.0 551.8,175.0 566.7,175.0 581.6,175.0 596.5,175.0 611.4,133.3 626.3,175.0 641.2,175.0 656.1,175.0 671.0,175.0 685.9,164.6 700.8,164.6 715.7,154.1 730.6,148.9 745.5,159.3 760.4,175.0 775.3,175.0 790.2,175.0 805.1,175.0 820.0,55.0 820.0,175.0" fill="url(#area-grad)"/>
 
   <!-- Line -->
-  <polyline points="60.0,175.0 74.9,175.0 89.8,175.0 104.7,175.0 119.6,175.0 134.5,175.0 149.4,175.0 164.3,175.0 179.2,175.0 194.1,175.0 209.0,175.0 223.9,175.0 238.8,175.0 253.7,175.0 268.6,175.0 283.5,175.0 298.4,175.0 313.3,175.0 328.2,175.0 343.1,175.0 358.0,175.0 372.9,175.0 387.8,175.0 402.7,175.0 417.6,153.2 432.5,175.0 447.5,175.0 462.4,175.0 477.3,175.0 492.2,175.0 507.1,175.0 522.0,175.0 536.9,175.0 551.8,175.0 566.7,175.0 581.6,175.0 596.5,175.0 611.4,131.4 626.3,175.0 641.2,175.0 656.1,175.0 671.0,175.0 685.9,164.1 700.8,164.1 715.7,153.2 730.6,147.7 745.5,158.6 760.4,175.0 775.3,175.0 790.2,175.0 805.1,175.0 820.0,55.0" fill="none" stroke="url(#line-grad)"
+  <polyline points="60.0,175.0 74.9,175.0 89.8,175.0 104.7,175.0 119.6,175.0 134.5,175.0 149.4,175.0 164.3,175.0 179.2,175.0 194.1,175.0 209.0,175.0 223.9,175.0 238.8,175.0 253.7,175.0 268.6,175.0 283.5,175.0 298.4,175.0 313.3,175.0 328.2,175.0 343.1,175.0 358.0,175.0 372.9,175.0 387.8,175.0 402.7,175.0 417.6,154.1 432.5,175.0 447.5,175.0 462.4,175.0 477.3,175.0 492.2,175.0 507.1,175.0 522.0,175.0 536.9,175.0 551.8,175.0 566.7,175.0 581.6,175.0 596.5,175.0 611.4,133.3 626.3,175.0 641.2,175.0 656.1,175.0 671.0,175.0 685.9,164.6 700.8,164.6 715.7,154.1 730.6,148.9 745.5,159.3 760.4,175.0 775.3,175.0 790.2,175.0 805.1,175.0 820.0,55.0" fill="none" stroke="url(#line-grad)"
             stroke-width="2" stroke-linejoin="round" filter="url(#glow-graph)"/>
 
   <!-- Peak marker -->
@@ -71,7 +71,7 @@
     <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
   </circle>
   <text x="820.0" y="45.0" fill="#00d4ff" font-size="10"
-        font-family="monospace" text-anchor="middle" font-weight="bold">22</text>
+        font-family="monospace" text-anchor="middle" font-weight="bold">23</text>
 
   <!-- Zero label -->
   <text x="52" y="178" fill="#64748b" font-size="9"
