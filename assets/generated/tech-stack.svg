@@ -75,7 +75,7 @@
     <g>
       <animateTransform attributeName="transform" type="rotate"
         from="0 260 135" to="360 260 135"
-        dur="41s" repeatCount="indefinite"/>
+        dur="39s" repeatCount="indefinite"/>
       <circle cx="188.9" cy="33.4" r="4.0" fill="#012456" opacity="0.9">
         <animate attributeName="opacity" values="0.75;1;0.75" dur="3s" repeatCount="indefinite"/>
       </circle>
@@ -93,7 +93,7 @@
     <g>
       <animateTransform attributeName="transform" type="rotate"
         from="0 260 135" to="360 260 135"
-        dur="33s" repeatCount="indefinite"/>
+        dur="35s" repeatCount="indefinite"/>
       <circle cx="397.1" cy="52.6" r="4.0" fill="#8b949e" opacity="0.9">
         <animate attributeName="opacity" values="0.75;1;0.75" dur="3s" repeatCount="indefinite"/>
       </circle>
