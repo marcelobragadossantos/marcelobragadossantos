@@ -107,10 +107,10 @@
     <text x="135" y="86" fill="#64748b" font-size="10" font-family="monospace">31.8%</text>
     <circle cx="29" cy="98" r="4" fill="#f1e05a" opacity="0.9"/>
     <text x="39" y="102" fill="#94a3b8" font-size="10" font-family="monospace">JavaScript</text>
-    <text x="135" y="102" fill="#64748b" font-size="10" font-family="monospace">18.6%</text>
+    <text x="135" y="102" fill="#64748b" font-size="10" font-family="monospace">18.5%</text>
     <circle cx="29" cy="114" r="4" fill="#8b949e" opacity="0.9"/>
     <text x="39" y="118" fill="#94a3b8" font-size="10" font-family="monospace">EJS</text>
-    <text x="135" y="118" fill="#64748b" font-size="10" font-family="monospace">1.3%</text>
+    <text x="135" y="118" fill="#64748b" font-size="10" font-family="monospace">1.4%</text>
     <circle cx="29" cy="130" r="4" fill="#8b949e" opacity="0.9"/>
     <text x="39" y="134" fill="#94a3b8" font-size="10" font-family="monospace">PLpgSQL</text>
     <text x="135" y="134" fill="#64748b" font-size="10" font-family="monospace">0.5%</text>
