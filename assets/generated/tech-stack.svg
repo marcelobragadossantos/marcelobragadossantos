@@ -31,10 +31,10 @@
       <animateTransform attributeName="transform" type="rotate"
         from="0 260 135" to="360 260 135"
         dur="12s" repeatCount="indefinite"/>
-      <circle cx="294.0" cy="135.0" r="10.8" fill="#3178c6" opacity="0.9">
+      <circle cx="294.0" cy="135.0" r="10.7" fill="#3178c6" opacity="0.9">
         <animate attributeName="opacity" values="0.75;1;0.75" dur="3s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="294.0" cy="135.0" r="12.8" fill="#3178c6" opacity="0.18"/>
+      <circle cx="294.0" cy="135.0" r="12.7" fill="#3178c6" opacity="0.18"/>
     </g>
     <g>
       <animateTransform attributeName="transform" type="rotate"
@@ -101,13 +101,13 @@
     </g>
     <circle cx="29" cy="66" r="4" fill="#3178c6" opacity="0.9"/>
     <text x="39" y="70" fill="#94a3b8" font-size="10" font-family="monospace">TypeScript</text>
-    <text x="135" y="70" fill="#64748b" font-size="10" font-family="monospace">41.9%</text>
+    <text x="135" y="70" fill="#64748b" font-size="10" font-family="monospace">41.7%</text>
     <circle cx="29" cy="82" r="4" fill="#3572A5" opacity="0.9"/>
     <text x="39" y="86" fill="#94a3b8" font-size="10" font-family="monospace">Python</text>
-    <text x="135" y="86" fill="#64748b" font-size="10" font-family="monospace">37.6%</text>
+    <text x="135" y="86" fill="#64748b" font-size="10" font-family="monospace">37.9%</text>
     <circle cx="29" cy="98" r="4" fill="#f1e05a" opacity="0.9"/>
     <text x="39" y="102" fill="#94a3b8" font-size="10" font-family="monospace">JavaScript</text>
-    <text x="135" y="102" fill="#64748b" font-size="10" font-family="monospace">18.6%</text>
+    <text x="135" y="102" fill="#64748b" font-size="10" font-family="monospace">18.5%</text>
     <circle cx="29" cy="114" r="4" fill="#8b949e" opacity="0.9"/>
     <text x="39" y="118" fill="#94a3b8" font-size="10" font-family="monospace">EJS</text>
     <text x="135" y="118" fill="#64748b" font-size="10" font-family="monospace">1.0%</text>
