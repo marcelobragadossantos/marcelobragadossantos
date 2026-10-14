@@ -113,7 +113,7 @@
     <text x="135" y="118" fill="#64748b" font-size="10" font-family="monospace">0.9%</text>
     <circle cx="29" cy="130" r="4" fill="#8b949e" opacity="0.9"/>
     <text x="39" y="134" fill="#94a3b8" font-size="10" font-family="monospace">PLpgSQL</text>
-    <text x="135" y="134" fill="#64748b" font-size="10" font-family="monospace">0.4%</text>
+    <text x="135" y="134" fill="#64748b" font-size="10" font-family="monospace">0.5%</text>
     <circle cx="29" cy="146" r="4" fill="#012456" opacity="0.9"/>
     <text x="39" y="150" fill="#94a3b8" font-size="10" font-family="monospace">PowerShell</text>
     <text x="135" y="150" fill="#64748b" font-size="10" font-family="monospace">0.2%</text>
